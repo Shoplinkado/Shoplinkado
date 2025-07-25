@@ -56,23 +56,31 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Stats Section */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-gray-50 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-shopee-orange">500+</div>
-          <div className="text-sm text-gray-600">Produtos</div>
-        </div>
-        <div className="bg-gray-50 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-shopee-orange">5</div>
-          <div className="text-sm text-gray-600">Categorias</div>
-        </div>
-        <div className="bg-gray-50 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-shopee-orange">Daily</div>
-          <div className="text-sm text-gray-600">Atualizações</div>
-        </div>
-        <div className="bg-gray-50 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-shopee-orange">100%</div>
-          <div className="text-sm text-gray-600">Gratuito</div>
+      {/* Info Section */}
+      <div className="bg-white rounded-2xl p-8 shadow-lg mb-8">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+          🚀 Site em Construção
+        </h2>
+        <p className="text-gray-600 text-center mb-6">
+          Estamos selecionando os melhores produtos da Shopee para você. Em breve teremos produtos incríveis em todas as categorias!
+        </p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-gray-50 rounded-xl p-4 text-center">
+            <div className="text-2xl font-bold text-shopee-orange">5</div>
+            <div className="text-sm text-gray-600">Categorias</div>
+          </div>
+          <div className="bg-gray-50 rounded-xl p-4 text-center">
+            <div className="text-2xl font-bold text-shopee-orange">100%</div>
+            <div className="text-sm text-gray-600">Gratuito</div>
+          </div>
+          <div className="bg-gray-50 rounded-xl p-4 text-center">
+            <div className="text-2xl font-bold text-shopee-orange">24h</div>
+            <div className="text-sm text-gray-600">Atualizações</div>
+          </div>
+          <div className="bg-gray-50 rounded-xl p-4 text-center">
+            <div className="text-2xl font-bold text-shopee-orange">Oficial</div>
+            <div className="text-sm text-gray-600">Links Shopee</div>
+          </div>
         </div>
       </div>
     </main>

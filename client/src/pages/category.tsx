@@ -79,18 +79,40 @@ export default function Category() {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products?.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {products && products.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
 
-        {/* Load More Button */}
-        <div className="text-center mt-12">
-          <Button variant="outline" size="lg">
-            Carregar Mais Produtos
-          </Button>
-        </div>
+            {/* Load More Button */}
+            <div className="text-center mt-12">
+              <Button variant="outline" size="lg">
+                Carregar Mais Produtos
+              </Button>
+            </div>
+          </>
+        ) : (
+          <div className="text-center py-16">
+            <div className="text-6xl mb-4">{category.emoji}</div>
+            <h3 className="text-2xl font-bold text-gray-800 mb-4">
+              Em breve teremos produtos incríveis aqui!
+            </h3>
+            <p className="text-gray-600 mb-8 max-w-md mx-auto">
+              Estamos preparando uma seleção especial de produtos da categoria {category.name} para você.
+            </p>
+            <div className="bg-gradient-to-r from-[var(--shopee-orange)] to-[var(--shopee-orange-light)] rounded-2xl p-6 text-white max-w-md mx-auto">
+              <p className="font-medium">
+                📧 Quer ser avisado quando chegarem novos produtos?
+              </p>
+              <p className="text-sm mt-2 opacity-90">
+                Entre em contato: shoplinkadobr@gmail.com
+              </p>
+            </div>
+          </div>
+        )}
       </main>
     </>
   );

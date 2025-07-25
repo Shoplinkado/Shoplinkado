@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import Category from "@/pages/category";
+import Admin from "@/pages/admin";
 import Footer from "@/components/footer";
 
 function Router() {
@@ -15,6 +16,7 @@ function Router() {
         <Switch>
           <Route path="/" component={Home} />
           <Route path="/categoria/:slug" component={Category} />
+          <Route path="/admin" component={Admin} />
           <Route component={NotFound} />
         </Switch>
       </div>

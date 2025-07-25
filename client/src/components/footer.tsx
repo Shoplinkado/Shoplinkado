@@ -25,9 +25,17 @@ export default function Footer() {
             </div>
           </div>
           <div className="mt-4 pt-4 border-t border-gray-200">
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-500 mb-2">
               Este site contém links de afiliados. Podemos receber uma comissão por compras realizadas através destes links, sem custo adicional para você.
             </p>
+            <div className="text-center">
+              <a
+                href="/admin"
+                className="text-xs text-gray-400 hover:text-shopee-orange transition-colors"
+              >
+                Admin
+              </a>
+            </div>
           </div>
         </div>
       </div>
