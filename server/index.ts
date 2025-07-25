@@ -1,10 +1,23 @@
 import express, { type Request, Response, NextFunction } from "express";
+import session from "express-session";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Configurar sessões
+app.use(session({
+  secret: 'shoplinkado-secret-key-2024',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false, // mudaria para true em produção com HTTPS
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000 // 24 horas
+  }
+}));
 
 app.use((req, res, next) => {
   const start = Date.now();

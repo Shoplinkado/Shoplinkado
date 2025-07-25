@@ -66,6 +66,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin authentication routes
+  app.post("/api/admin/login", (req: any, res) => {
+    try {
+      const { password } = req.body;
+      
+      // Senha simples - você pode alterar aqui
+      const ADMIN_PASSWORD = "admin123";
+      
+      if (password === ADMIN_PASSWORD) {
+        // Salvar na sessão HTTP
+        req.session.isAdmin = true;
+        req.session.loginTime = new Date();
+        
+        res.json({ success: true });
+      } else {
+        res.status(401).json({ message: "Senha incorreta" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Erro no servidor" });
+    }
+  });
+
+  // Verificar se está autenticado
+  app.get("/api/admin/check", (req: any, res) => {
+    try {
+      if (!req.session.isAdmin) {
+        return res.status(401).json({ message: "Não autenticado" });
+      }
+      
+      // Verificar se a sessão não expirou (24 horas)
+      const loginTime = new Date(req.session.loginTime);
+      const now = new Date();
+      const diffHours = (now.getTime() - loginTime.getTime()) / (1000 * 60 * 60);
+      
+      if (diffHours > 24) {
+        req.session.isAdmin = false;
+        return res.status(401).json({ message: "Sessão expirada" });
+      }
+      
+      res.json({ authenticated: true });
+    } catch (error) {
+      res.status(500).json({ message: "Erro no servidor" });
+    }
+  });
+
+  // Logout admin
+  app.post("/api/admin/logout", (req: any, res) => {
+    try {
+      req.session.isAdmin = false;
+      req.session.loginTime = null;
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ message: "Erro no servidor" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

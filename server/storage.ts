@@ -1,4 +1,4 @@
-import { type Category, type InsertCategory, type Product, type InsertProduct } from "@shared/schema";
+import { type Category, type InsertCategory, type Product, type InsertProduct, type AdminSession, type InsertAdminSession } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -11,15 +11,22 @@ export interface IStorage {
   getAllProducts(): Promise<Product[]>;
   getProductsByCategory(categoryId: string): Promise<Product[]>;
   createProduct(product: InsertProduct): Promise<Product>;
+  
+  // Admin Sessions
+  createAdminSession(session: InsertAdminSession): Promise<AdminSession>;
+  getAdminSession(id: string): Promise<AdminSession | undefined>;
+  deleteAdminSession(id: string): Promise<void>;
 }
 
 export class MemStorage implements IStorage {
   private categories: Map<string, Category>;
   private products: Map<string, Product>;
+  private adminSessions: Map<string, AdminSession>;
 
   constructor() {
     this.categories = new Map();
     this.products = new Map();
+    this.adminSessions = new Map();
     this.initializeData();
   }
 
@@ -68,6 +75,25 @@ export class MemStorage implements IStorage {
     const product: Product = { ...insertProduct, id };
     this.products.set(id, product);
     return product;
+  }
+
+  async createAdminSession(insertSession: InsertAdminSession): Promise<AdminSession> {
+    const id = randomUUID();
+    const session: AdminSession = { 
+      ...insertSession, 
+      id,
+      createdAt: new Date()
+    };
+    this.adminSessions.set(id, session);
+    return session;
+  }
+
+  async getAdminSession(id: string): Promise<AdminSession | undefined> {
+    return this.adminSessions.get(id);
+  }
+
+  async deleteAdminSession(id: string): Promise<void> {
+    this.adminSessions.delete(id);
   }
 }
 

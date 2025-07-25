@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { ArrowLeft, Plus } from "lucide-react";
 import { type Category, type Product, insertProductSchema } from "@shared/schema";
 import { Button } from "@/components/ui/button";
@@ -24,14 +24,41 @@ type ProductFormData = z.infer<typeof productFormSchema>;
 export default function Admin() {
   const { toast } = useToast();
   const [showForm, setShowForm] = useState(false);
+  const [, setLocation] = useLocation();
+
+  // Verificar se está autenticado
+  const { data: authCheck, isLoading: authLoading } = useQuery({
+    queryKey: ["/api/admin/check"],
+    retry: false,
+  });
+
+  useEffect(() => {
+    if (!authLoading && !authCheck) {
+      setLocation("/admin/login");
+    }
+  }, [authCheck, authLoading, setLocation]);
 
   const { data: categories } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
+    enabled: !!authCheck,
   });
 
   const { data: products } = useQuery<Product[]>({
     queryKey: ["/api/products"],
+    enabled: !!authCheck,
   });
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg">Verificando acesso...</div>
+      </div>
+    );
+  }
+
+  if (!authCheck) {
+    return null; // Será redirecionado para login
+  }
 
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productFormSchema),
@@ -87,12 +114,25 @@ export default function Admin() {
             <h1 className="text-2xl font-bold text-shopee-orange">
               Admin - Shoplinkado 🔗🛍️
             </h1>
-            <Link href="/">
-              <Button variant="outline" size="sm">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Voltar ao Site
+            <div className="flex gap-2">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => {
+                  apiRequest("/api/admin/logout", "POST").then(() => {
+                    setLocation("/");
+                  });
+                }}
+              >
+                Sair
               </Button>
-            </Link>
+              <Link href="/">
+                <Button variant="outline" size="sm">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Voltar ao Site
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </header>

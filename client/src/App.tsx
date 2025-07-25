@@ -7,6 +7,7 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import Category from "@/pages/category";
 import Admin from "@/pages/admin";
+import AdminLogin from "@/pages/admin-login";
 import Footer from "@/components/footer";
 
 function Router() {
@@ -16,6 +17,7 @@ function Router() {
         <Switch>
           <Route path="/" component={Home} />
           <Route path="/categoria/:slug" component={Category} />
+          <Route path="/admin/login" component={AdminLogin} />
           <Route path="/admin" component={Admin} />
           <Route component={NotFound} />
         </Switch>
