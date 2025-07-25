@@ -33,6 +33,7 @@ export class MemStorage implements IStorage {
   private async initializeData() {
     // Initialize categories
     const categoriesData = [
+      { name: "Achados do Dia", emoji: "🏠", description: "Produtos especiais para cada época do ano", slug: "achados" },
       { name: "Moda & Estilo", emoji: "👗", description: "Roupas, acessórios e tendências", slug: "moda" },
       { name: "Casa & Decoração", emoji: "🛋", description: "Itens para deixar sua casa linda", slug: "casa" },
       { name: "Tecnologia", emoji: "📱", description: "Gadgets e eletrônicos incríveis", slug: "tecnologia" },

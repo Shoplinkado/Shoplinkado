@@ -2,7 +2,7 @@
 
 ## Overview
 
-Shoplinkado is a Brazilian e-commerce affiliate platform that aggregates and displays products from Shopee with organized categories and direct purchase links. The application features a clean, mobile-first design with Portuguese content targeting Brazilian users.
+Shoplinkado is a Brazilian e-commerce affiliate platform that aggregates and displays products from Shopee with organized categories and direct purchase links. The application features a clean, mobile-first design with Portuguese content targeting Brazilian users. It includes seasonal categories like "Achados do Dia" for holiday promotions and special events.
 
 ## User Preferences
 
