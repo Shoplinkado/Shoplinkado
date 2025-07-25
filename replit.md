@@ -7,6 +7,7 @@ Shoplinkado is a Brazilian e-commerce affiliate platform that aggregates and dis
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+Admin password: Maduh5082410381
 
 ## System Architecture
 
@@ -48,11 +49,17 @@ Preferred communication style: Simple, everyday language.
 - **Affiliate Integration**: Direct links to Shopee product pages
 - **Responsive Design**: Mobile-first design optimized for Brazilian users
 - **Flash Sales**: Special promotion handling with visual indicators
+- **Admin Authentication**: Secure admin panel with session-based authentication
+- **Product Management**: Admin interface to add and manage affiliate products
 
 ### API Endpoints
 - `GET /api/categories` - Retrieve all categories
 - `GET /api/categories/:slug` - Get specific category by slug
 - `GET /api/categories/:slug/products` - Get products for a category
+- `POST /api/products` - Create new product (authenticated)
+- `POST /api/admin/login` - Admin authentication
+- `POST /api/admin/logout` - Admin logout
+- `GET /api/admin/check` - Check admin authentication status
 
 ## Data Flow
 
