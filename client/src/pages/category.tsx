@@ -1,3 +1,4 @@
+import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, Link } from "wouter";
 import { ArrowLeft } from "lucide-react";
@@ -5,8 +6,11 @@ import { type Category, type Product } from "@shared/schema";
 import ProductCard from "@/components/product-card";
 import { Button } from "@/components/ui/button";
 
+type FilterType = "todos" | "mais-vendidos" | "menor-preco" | "avaliacao";
+
 export default function Category() {
   const { slug } = useParams<{ slug: string }>();
+  const [activeFilter, setActiveFilter] = useState<FilterType>("todos");
 
   const { data: category, isLoading: categoryLoading } = useQuery<Category>({
     queryKey: ["/api/categories", slug],
@@ -16,6 +20,32 @@ export default function Category() {
     queryKey: ["/api/categories", slug, "products"],
     enabled: !!slug,
   });
+
+  const sortedProducts = useMemo(() => {
+    if (!products) return [];
+    
+    switch (activeFilter) {
+      case "mais-vendidos":
+        return [...products].sort((a, b) => {
+          const soldA = parseInt(a.sold.replace(/\D/g, '')) || 0;
+          const soldB = parseInt(b.sold.replace(/\D/g, '')) || 0;
+          return soldB - soldA;
+        });
+      
+      case "menor-preco":
+        return [...products].sort((a, b) => {
+          const priceA = parseFloat(a.price.replace('R$ ', '').replace(',', '.'));
+          const priceB = parseFloat(b.price.replace('R$ ', '').replace(',', '.'));
+          return priceA - priceB;
+        });
+      
+      case "avaliacao":
+        return [...products].sort((a, b) => b.rating - a.rating);
+      
+      default:
+        return products;
+    }
+  }, [products, activeFilter]);
 
   if (categoryLoading || productsLoading) {
     return (
@@ -64,25 +94,41 @@ export default function Category() {
 
         {/* Filters */}
         <div className="flex flex-wrap gap-4 mb-8">
-          <Button className="shopee-orange text-white hover:shopee-orange-dark">
+          <Button 
+            onClick={() => setActiveFilter("todos")}
+            className={activeFilter === "todos" ? "shopee-orange text-white hover:shopee-orange-dark" : ""}
+            variant={activeFilter === "todos" ? "default" : "outline"}
+          >
             Todos
           </Button>
-          <Button variant="outline">
+          <Button 
+            onClick={() => setActiveFilter("mais-vendidos")}
+            className={activeFilter === "mais-vendidos" ? "shopee-orange text-white hover:shopee-orange-dark" : ""}
+            variant={activeFilter === "mais-vendidos" ? "default" : "outline"}
+          >
             Mais Vendidos
           </Button>
-          <Button variant="outline">
+          <Button 
+            onClick={() => setActiveFilter("menor-preco")}
+            className={activeFilter === "menor-preco" ? "shopee-orange text-white hover:shopee-orange-dark" : ""}
+            variant={activeFilter === "menor-preco" ? "default" : "outline"}
+          >
             Menor Preço
           </Button>
-          <Button variant="outline">
+          <Button 
+            onClick={() => setActiveFilter("avaliacao")}
+            className={activeFilter === "avaliacao" ? "shopee-orange text-white hover:shopee-orange-dark" : ""}
+            variant={activeFilter === "avaliacao" ? "default" : "outline"}
+          >
             Avaliação
           </Button>
         </div>
 
         {/* Products Grid */}
-        {products && products.length > 0 ? (
+        {sortedProducts && sortedProducts.length > 0 ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {products.map((product) => (
+              {sortedProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
