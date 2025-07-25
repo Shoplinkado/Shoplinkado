@@ -26,40 +26,7 @@ export default function Admin() {
   const [showForm, setShowForm] = useState(false);
   const [, setLocation] = useLocation();
 
-  // Verificar se está autenticado
-  const { data: authCheck, isLoading: authLoading } = useQuery({
-    queryKey: ["/api/admin/check"],
-    retry: false,
-  });
-
-  useEffect(() => {
-    if (!authLoading && !authCheck) {
-      setLocation("/admin/login");
-    }
-  }, [authCheck, authLoading, setLocation]);
-
-  const { data: categories } = useQuery<Category[]>({
-    queryKey: ["/api/categories"],
-    enabled: !!authCheck,
-  });
-
-  const { data: products } = useQuery<Product[]>({
-    queryKey: ["/api/products"],
-    enabled: !!authCheck,
-  });
-
-  if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Verificando acesso...</div>
-      </div>
-    );
-  }
-
-  if (!authCheck) {
-    return null; // Será redirecionado para login
-  }
-
+  // Todos os hooks devem estar no topo
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productFormSchema),
     defaultValues: {
@@ -73,6 +40,22 @@ export default function Admin() {
       shopeeUrl: "",
       isFlash: false,
     },
+  });
+
+  // Verificar se está autenticado
+  const { data: authCheck, isLoading: authLoading } = useQuery({
+    queryKey: ["/api/admin/check"],
+    retry: false,
+  });
+
+  const { data: categories } = useQuery<Category[]>({
+    queryKey: ["/api/categories"],
+    enabled: !!authCheck,
+  });
+
+  const { data: products } = useQuery<Product[]>({
+    queryKey: ["/api/products"],
+    enabled: !!authCheck,
   });
 
   const createProductMutation = useMutation({
@@ -102,9 +85,29 @@ export default function Admin() {
     },
   });
 
+  // useEffect deve estar após todos os outros hooks
+  useEffect(() => {
+    if (!authLoading && !authCheck) {
+      setLocation("/admin/login");
+    }
+  }, [authCheck, authLoading, setLocation]);
+
   const onSubmit = (data: ProductFormData) => {
     createProductMutation.mutate(data);
   };
+
+  // Renderização condicional no final
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg">Verificando acesso...</div>
+      </div>
+    );
+  }
+
+  if (!authCheck) {
+    return null; // Será redirecionado para login
+  }
 
   return (
     <>

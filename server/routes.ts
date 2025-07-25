@@ -74,23 +74,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Senha simples - você pode alterar aqui
       const ADMIN_PASSWORD = "Maduh5082410381";
       
-      console.log("Tentativa de login - Senha recebida:", password);
-      console.log("Senha esperada:", ADMIN_PASSWORD);
-      console.log("Senhas são iguais:", password === ADMIN_PASSWORD);
-      
       if (password === ADMIN_PASSWORD) {
         // Salvar na sessão HTTP
         req.session.isAdmin = true;
         req.session.loginTime = new Date();
         
-        console.log("Login realizado com sucesso");
         res.json({ success: true });
       } else {
-        console.log("Senha incorreta - rejeitando login");
         res.status(401).json({ message: "Senha incorreta" });
       }
     } catch (error) {
-      console.error("Erro no login:", error);
       res.status(500).json({ message: "Erro no servidor" });
     }
   });
