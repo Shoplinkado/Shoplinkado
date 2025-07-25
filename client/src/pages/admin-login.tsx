@@ -31,16 +31,23 @@ export default function AdminLogin() {
 
   const loginMutation = useMutation({
     mutationFn: async (data: LoginData) => {
-      return apiRequest("/api/admin/login", "POST", data);
+      console.log("Enviando dados de login:", data);
+      const response = await apiRequest("/api/admin/login", "POST", data);
+      console.log("Resposta do servidor:", response);
+      return response;
     },
     onSuccess: () => {
+      console.log("Login bem-sucedido");
       toast({
         title: "Login realizado!",
         description: "Redirecionando para o painel admin...",
       });
-      setLocation("/admin");
+      setTimeout(() => {
+        setLocation("/admin");
+      }, 1000);
     },
-    onError: () => {
+    onError: (error) => {
+      console.error("Erro no login:", error);
       toast({
         title: "Senha incorreta",
         description: "Verifique a senha e tente novamente.",
